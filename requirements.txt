@@ -1,0 +1,2 @@
+python-telegram-bot==2.7.1
+xkcd==2.3.1
