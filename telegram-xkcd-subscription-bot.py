@@ -67,6 +67,10 @@ def process_updates(updates):
             logging.info("received /help from %s" % message.from_user)
             bot.sendMessage(chat_id=message.chat_id, text="You asked for help. What is wrong?")
 
+        if '/status' in message.text:
+            logging.info("received /status from %s" % message.from_user)
+            bot.sendMessage(chat_id=message.chat_id, text="Up and running!")
+
 
 def send_new_comic_to_all(number):
     for id in subscribed_chat_ids:
