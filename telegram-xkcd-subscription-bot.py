@@ -5,17 +5,18 @@ import xkcd
 import logging
 from time import sleep
 import atexit
-import api_token # add your token here
+import api_token  # add your token here
 
 logging.basicConfig(level=logging.INFO)
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 
 last_latest = 0
-bot = telegram.Bot(token = api_token.api_token)
+bot = telegram.Bot(token=api_token.api_token)
 subscribed_chat_ids = set()  # this is a set
 updates_per_minute = 30
 sub_filename = "subscribed_chat_ids"
+
 
 def main():
     last_update_id = 0
@@ -42,6 +43,7 @@ def main():
 
         # sleep some time
         sleep(60 / updates_per_minute)
+
 
 def process_updates(updates):
     for update in updates:
@@ -76,11 +78,13 @@ def send_new_comic_to_all(number):
     for id in subscribed_chat_ids:
         send_new_comic(number, id)
 
+
 def send_new_comic(number, chat_id):
     comic = xkcd.getComic(number)
     bot.sendMessage(chat_id=chat_id, text="Title:\n%s" % comic.getTitle())
     bot.sendPhoto(chat_id=chat_id, photo=comic.getImageLink())
     bot.sendMessage(chat_id=chat_id, text="Alt text:\n%s" % comic.getAltText())
+
 
 def check_new_comic():
     global last_latest
@@ -90,11 +94,13 @@ def check_new_comic():
         return (True, latest)
     return (False, latest)
 
+
 def read_subscription_file_to_set(subscribed_chat_ids):
     logging.info("Reading subscription file")
     with open(sub_filename, 'r') as file:
         for line in file:
             subscribed_chat_ids.add(int(line))
+
 
 def write_subscription_file():
     logging.info("Writing subscription file")
@@ -104,5 +110,3 @@ def write_subscription_file():
 if __name__ == '__main__':
     atexit.register(write_subscription_file)
     main()
-
-
